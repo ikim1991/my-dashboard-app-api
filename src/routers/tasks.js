@@ -12,7 +12,9 @@ router.post("/tasks", auth, async (req, res) => {
 
   try{
     await task.save()
-    res.status(200).send(task)
+    const tasks = await Tasks.find({ user: req.user._id }).sort({ deadline: 1 })
+
+    res.status(200).send(tasks)
   } catch(error){
     res.status(400).send()
   }
@@ -21,14 +23,14 @@ router.post("/tasks", auth, async (req, res) => {
 router.get("/tasks", auth, async (req, res) => {
 
   try{
-    const task = await Tasks.find().sort({createdAt: 1})
+    const task = await Tasks.find().sort({deadline: 1})
     res.send(task)
   } catch(error){
     res.status(500).send()
   }
 })
 
-router.patch("/tasks/:id", auth, async (req, res) => {
+router.post("/tasks/:id", auth, async (req, res) => {
 
   const _id = req.params.id
 
@@ -41,13 +43,13 @@ router.patch("/tasks/:id", auth, async (req, res) => {
 
     if(task.completed){
       task.completed = false
-      task.save()
     } else{
       task.completed = true
-      task.save()
     }
+    await task.save()
 
-    res.send(task)
+    const tasks = await Tasks.find({ user: req.user._id }).sort({deadline: 1})
+    res.send(tasks)
 
   }catch(error){
     res.status(400).send()
@@ -62,7 +64,10 @@ router.delete("/tasks/:id", auth, async (req, res) => {
     if(!task){
       return res.status(404).send()
     }
-    res.send(task)
+
+    const tasks = await Tasks.find({ user: req.user._id }).sort({deadline: 1})
+
+    res.send(tasks)
   }catch(error){
     res.status(500).send()
   }
