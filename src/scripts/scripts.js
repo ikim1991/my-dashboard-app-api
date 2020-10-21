@@ -1,7 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const getStockPrices = async (stockTickers) => {
+const getStockPrices = async (stockTickers = []) => {
 	try {
     const stockPrices = []
     for(let ticker of stockTickers){
@@ -22,12 +22,13 @@ const getStockPrices = async (stockTickers) => {
 			const $ = cheerio.load(data);
 
 			if(ticker.market.toUpperCase() === "CRYPTO"){
+				const status = $('div#quote-market-notice').text().trim().split(".")[0].trim()
 				stockPrices.push({
 					ticker: `${ticker.symbol}-USD`,
 					company: $('h1[class="D(ib) Fz(18px)"]').text().trim(),
 					price: $('span[class="Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)"]').text().trim(),
 					change: $('div[class="D(ib) Mend(20px)"] span[data-reactid="33"]').text().trim(),
-					status: $('div#quote-market-notice').text().trim()
+					status: status
 				})
 			}else if(ticker.market.toUpperCase() === "NASDAQ" || ticker.market.toUpperCase() === "NYSE"){
 				stockPrices.push({
@@ -53,7 +54,7 @@ const getStockPrices = async (stockTickers) => {
   }
 }
 
-const getStockNews = async (stockTickers) => {
+const getStockNews = async (stockTickers = []) => {
 	try {
 		const news = []
 

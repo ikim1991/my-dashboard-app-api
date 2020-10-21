@@ -2,6 +2,8 @@ const express = require("express")
 const router = new express.Router()
 const Users = require('../models/users')
 const Tasks = require('../models/tasks')
+const Tickers = require('../models/tickers')
+const Postings = require('../models/postings')
 const auth = require("../middleware/auth")
 
 router.post("/users", async (req, res) => {
@@ -12,6 +14,8 @@ router.post("/users", async (req, res) => {
 
     if(!findUser){
       const user = await new Users(req.body)
+      await new Users({user: user._id})
+      await new Postings({user: user._id})
 
       await user.save()
       const token = await user.generateAuthToken()
@@ -30,8 +34,10 @@ router.post("/users/login", async (req, res) => {
   try{
     const user = await Users.findByCredentials(req.body.email, req.body.password)
     const tasks = await Tasks.find({ user: user._id }).sort({ deadline: 1 })
+    const tickers = await Tickers.findOne({user: user._id})
+    const postings = await Postings.findOne({user: user._id})
     const token = await user.generateAuthToken()
-    res.send({ user, token, tasks })
+    res.send({ user, token, tasks, tickers, postings })
   } catch (error){
     res.status(404).send({ error: "Invalid Username and Password"})
   }
