@@ -42,19 +42,4 @@ router.get("/tickers", auth, async (req, res) => {
   }
 })
 
-router.get("/tickers/refresh", auth, async (req, res) => {
-  const user = req.user._id
-
-  try{
-    const findTickers = await Tickers.findOne({ user })
-    if(findTickers){
-      res.send({ tickers: findTickers.tickers, tickerData: findTickers.tickerData, news: findTickers.news })
-    } else{
-      res.status(404).send({error: "Data not found..."})
-    }
-  } catch(error){
-    res.status(400).send({error: error})
-  }
-})
-
 module.exports = router

@@ -27,17 +27,4 @@ router.get("/postings", auth, async (req, res) => {
   }
 })
 
-router.get("/postings/refresh", auth, async (req, res) => {
-
-  const user = req.user._id
-
-  try{
-      const postings = await Postings.findOne({user})
-      res.send(postings)
-
-  } catch(error){
-    res.status(400).send(error)
-  }
-})
-
 module.exports = router
