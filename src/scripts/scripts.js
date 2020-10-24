@@ -2,6 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 const getStockPrices = async (stockTickers = []) => {
+
 	try {
     const stockPrices = []
     for(let ticker of stockTickers){

@@ -15,10 +15,12 @@ router.post("/users", async (req, res) => {
 
     if(!findUser){
       const user = await new Users(req.body)
-      await new Users({user: user._id})
-      await new Postings({user: user._id})
+      const tickers = await new Tickers({user: user._id})
+      const postings = await new Postings({user: user._id})
 
       await user.save()
+      await tickers.save()
+      await postings.save()
       const token = await user.generateAuthToken()
 
       res.status(201).send({ user, token })
@@ -32,14 +34,15 @@ router.post("/users", async (req, res) => {
 })
 
 router.post("/users/login", async (req, res) => {
+
   try{
     const user = await Users.findByCredentials(req.body.email, req.body.password)
     const tasks = await Tasks.find({ user: user._id }).sort({ deadline: 1 })
     const stockTickers = await Tickers.findOne({ user: user._id})
     const [yyz, yeg, yyc, yvr, tickerData, news] = await Promise.all([getTorontoJobPosts(), getEdmontonJobPosts(), getCalgaryJobPosts(), getVancouverJobPosts(), getStockPrices(stockTickers.tickers), getStockNews(stockTickers.tickers)])
     const concat = yyz.concat(yeg, yyc, yvr)
-    const postings = await Postings.findOneAndUpdate({ user: user._id }, {postings: concat}, { new: true })
     const tickers = await Tickers.findOneAndUpdate({ user: user._id }, { tickers: stockTickers.tickers, tickerData: tickerData, news: news }, { new: true })
+    const postings = await Postings.findOneAndUpdate({ user: user._id }, {postings: concat}, { new: true })
     const token = await user.generateAuthToken()
     res.send({ user, token, tasks, tickers, postings })
   } catch (error){
