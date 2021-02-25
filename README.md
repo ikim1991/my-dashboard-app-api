@@ -8,7 +8,7 @@ To view the coding documentation for this web application, refer to the link bel
 [Coding Documentation Link](https://ikim1991.github.io/coding-documentation/#/dashboard/)  
 
 The application is deployed through GitHub Pages and Heroku. The application can be found in the link below:  
-[Production Website Link](https://ikim1991.github.io/my-dashboard/)  
+[Production Website Link](https://ikim1991.github.io/my-dashboard-app/)  
 
 The source code for the client side can be found in the link below:  
 [Client Side Source Code](https://github.com/ikim1991/my-dashboard-app/)  
