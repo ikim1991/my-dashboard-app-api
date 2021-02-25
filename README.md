@@ -1,23 +1,21 @@
-# My Dashboard Back-end  
+# My Dashboard  
 
 ### Summary  
 
-For the sole purpose of trying to be more productive, I created this personalized dashboard web application. The dashboard has several functionalities such as:
-  - A Task Manager (To-Do List)
-  - A collection of developer-related job postings from 4 different sources
-  - A collection of financial data such as the intraday data as well as news and press releases of several stock tickers
+For the sake of trying to be more productive, I created a personalized dashboard web application. It serves as a task manager, a job posting compiler, and tracks financial stock price and news data.  
+
+To view the coding documentation for this web application, refer to the link below:  
+[Coding Documentation Link](https://ikim1991.github.io/coding-documentation/#/dashboard/)  
+
+The application is deployed through GitHub Pages and Heroku. The application can be found in the link below:  
+[Production Website Link](https://ikim1991.github.io/my-dashboard/)  
+
+The source code for the client side can be found in the link below:  
+[Client Side Source Code](https://github.com/ikim1991/my-dashboard-app/)  
 
 The back-end application is hosted on Heroku using its free-tier plan. This may cause the first login to take a few seconds to load as the app is put to sleep after 30 minutes of inactivity.  
 
-The front-end web application is hosted on GitHub using GitHub pages.  
-[Website Link](https://ikim1991.github.io/my-dashboard-app/)  
-[GitHub Repo](https://github.com/ikim1991/my-dashboard-app/)  
-
-The Back-end was built using Express.js and MongoDB on Node.js. It also utilizes JWTs for user authentication and persistence sessions, as well as bcrypt.js for storing passwords.  
-
-A 16:9 aspect ratio resolution is recommended.  
-The app is currently not supported on mobile and tablets.  
-Minimum screen resolution width of 1024px required.  
+The web application is currently not supported on mobile/tablet.  
 
 ### Images  
 
