@@ -9,11 +9,15 @@ router.get("/postings", auth, async (req, res) => {
   try{
     const user = req.user._id
     const [yyz, yeg, yyc, yvr] = await Promise.all([getTorontoJobPosts(), getEdmontonJobPosts(), getCalgaryJobPosts(), getVancouverJobPosts()])
-    const postings = yyz.concat(yeg, yyc, yvr)
+    const jobs = yyz.concat(yeg, yyc, yvr)
 
-    await Postings.findOneAndUpdate({user}, {postings})
+    const postings = await Postings.findOne({user})
+    postings.postings = jobs
+
+    postings.markModified('postings')
+    await postings.save()
     
-    res.send({postings})
+    res.send({postings: jobs})
   
   } catch(error){
     res.status(400).send(error)
