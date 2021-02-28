@@ -13,7 +13,7 @@ router.get("/postings", auth, async (req, res) => {
 
     await Postings.findOneAndUpdate({user}, {postings})
     
-    res.send(postings)
+    res.send({postings})
   
   } catch(error){
     res.status(400).send(error)

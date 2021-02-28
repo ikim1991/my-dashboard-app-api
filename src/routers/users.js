@@ -43,7 +43,7 @@ router.post("/users/login", async (req, res) => {
     const [yyz, yeg, yyc, yvr, tickerData, news] = await Promise.all([getTorontoJobPosts(), getEdmontonJobPosts(), getCalgaryJobPosts(), getVancouverJobPosts(), getStockPrices(stockTickers.tickers), getStockNews(stockTickers.tickers)])
     const concat = yyz.concat(yeg, yyc, yvr)
     const tickers = await Tickers.findOneAndUpdate({ user: user._id }, { tickers: stockTickers.tickers, tickerData: tickerData, news: news }, { new: true })
-    const postings = await Postings.findOneAndUpdate({ user: user._id }, {postings: concat})
+    const postings = await Postings.findOneAndUpdate({ user: user._id }, {postings: concat}, {new: true}) 
     const token = await user.generateAuthToken()
 
     res.send({user, token, tasks, tickers, postings })
