@@ -37,14 +37,16 @@ router.post("/users/login", async (req, res) => {
 
   try{
     const user = await Users.findByCredentials(req.body.email, req.body.password)
+
     const tasks = await Tasks.find({ user: user._id }).sort({ deadline: 1 })
     const stockTickers = await Tickers.findOne({ user: user._id})
     const [yyz, yeg, yyc, yvr, tickerData, news] = await Promise.all([getTorontoJobPosts(), getEdmontonJobPosts(), getCalgaryJobPosts(), getVancouverJobPosts(), getStockPrices(stockTickers.tickers), getStockNews(stockTickers.tickers)])
     const concat = yyz.concat(yeg, yyc, yvr)
     const tickers = await Tickers.findOneAndUpdate({ user: user._id }, { tickers: stockTickers.tickers, tickerData: tickerData, news: news }, { new: true })
-    const postings = await Postings.findOneAndUpdate({ user: user._id }, {postings: concat}, { new: true })
+    await Postings.findOneAndUpdate({ user: user._id }, {postings: concat})
     const token = await user.generateAuthToken()
-    res.send({ user, token, tasks, tickers, postings })
+
+    res.send({ user, token, tasks, tickers, postings: concat })
   } catch (error){
     res.status(404).send({ error: "Invalid Username and Password"})
   }

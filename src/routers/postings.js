@@ -6,22 +6,15 @@ const { getTorontoJobPosts, getEdmontonJobPosts, getCalgaryJobPosts, getVancouve
 
 router.get("/postings", auth, async (req, res) => {
 
-  const user = req.user._id
-
   try{
-    const prevPostings = await Postings.findOne({user})
+    const user = req.user._id
     const [yyz, yeg, yyc, yvr] = await Promise.all([getTorontoJobPosts(), getEdmontonJobPosts(), getCalgaryJobPosts(), getVancouverJobPosts()])
     const postings = yyz.concat(yeg, yyc, yvr)
 
-    if(!prevPostings){
-      const newPostings = await new Postings({ user, postings })
-      await newPostings.save()
-      res.send(newPostings)
-    }else{
-      const newPostings = await Postings.findOneAndUpdate({user}, {postings}, { new: true })
-      res.send(newPostings)
-    }
-
+    await Postings.findOneAndUpdate({user}, {postings})
+    
+    res.send(postings)
+  
   } catch(error){
     res.status(400).send(error)
   }
