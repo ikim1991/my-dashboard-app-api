@@ -11,13 +11,15 @@ router.get("/postings", auth, async (req, res) => {
     const [yyz, yeg, yyc, yvr] = await Promise.all([getTorontoJobPosts(), getEdmontonJobPosts(), getCalgaryJobPosts(), getVancouverJobPosts()])
     const jobs = yyz.concat(yeg, yyc, yvr)
 
-    const postings = await Postings.findOne({user})
-    postings.postings = jobs
+    const postings = await Postings.findOne({ user: user._id })
 
-    postings.markModified('postings')
-    await postings.save()
+    if(jobs.length > 0){
+      postings.postings = jobs
+      postings.markModified('postings')
+      await postings.save()
+    }
     
-    res.send({postings: jobs})
+    res.send({ postings })
   
   } catch(error){
     res.status(400).send(error)

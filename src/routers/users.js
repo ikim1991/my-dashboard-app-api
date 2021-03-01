@@ -44,13 +44,16 @@ router.post("/users/login", async (req, res) => {
     const jobs = yyz.concat(yeg, yyc, yvr)
     const tickers = await Tickers.findOneAndUpdate({ user: user._id }, { tickers: stockTickers.tickers, tickerData: tickerData, news: news }, { new: true })
     const postings = await Postings.findOne({ user: user._id })
-    postings.postings = jobs
 
-    postings.markModified('postings')
-    await postings.save() 
+    if(jobs.length > 0){
+      postings.postings = jobs
+      postings.markModified('postings')
+      await postings.save()
+    }
+
     const token = await user.generateAuthToken()
 
-    res.send({user, token, tasks, tickers, postings: jobs })
+    res.send({ user, token, tasks, tickers, postings })
   } catch (error){
     res.status(404).send({ error: "Invalid Username and Password"})
   }
